@@ -1,39 +1,47 @@
-function convertToRoman(num) {
-  const obj = {
-    0: ['M', 1000],
-    1: ['D', 500],
-    2: ['C', 100],
-    3: ['L', 50],
-    4: ['X', 10],
-    5: ['V', 5],
-    6: ['I', 1]
-  };
+// Function to convert a number to Roman numeral
+function intToRoman(num) {
+    // Roman symbol array
+    const romanSymbols = [
+        { value: 100000, symbol: 'C̅' }, // 100000 is represented by 'C̅' in some extended forms
+        { value: 10000, symbol: 'X̅' },  // 10000 is represented by 'X̅' in some extended forms
+        { value: 1000, symbol: 'M' },
+        { value: 900, symbol: 'CM' },
+        { value: 500, symbol: 'D' },
+        { value: 400, symbol: 'CD' },
+        { value: 100, symbol: 'C' },
+        { value: 90, symbol: 'XC' },
+        { value: 50, symbol: 'L' },
+        { value: 40, symbol: 'XL' },
+        { value: 10, symbol: 'X' },
+        { value: 9, symbol: 'IX' },
+        { value: 5, symbol: 'V' },
+        { value: 4, symbol: 'IV' },
+        { value: 1, symbol: 'I' }
+    ];
 
-  let romanNumeral = '';
+    let result = '';
 
-  for (let i = 0; i < Object.keys(obj).length; i++) {
-    const symbol = obj[i][0];
-    const value = obj[i][1];
-
-    // Repeat the symbol while subtracting its value from the number
-    while (num >= value) {
-      romanNumeral += symbol;
-      num -= value;
+    for (const symbol of romanSymbols) {
+        while (num >= symbol.value) {
+            result += symbol.symbol;
+            num -= symbol.value;
+        }
     }
 
-    // Handle subtractive notation by checking if the current symbol can be combined with the next symbol
-    if (i % 2 === 0 && i < Object.keys(obj).length - 1) {
-      const nextSymbol = obj[i + 2][0];
-      const nextValue = obj[i + 2][1];
-
-      if (num >= value - nextValue) {
-        romanNumeral += nextSymbol + symbol;
-        num -= value - nextValue;
-      }
-    }
-  }
-
-  return romanNumeral;
+    return result;
 }
 
-// console.log(convertToRoman(36)); // Output: XXXVI
+// Convert button click event handler
+const convertButton = document.getElementById("convertButton");
+convertButton.addEventListener("click", function () {
+    const inputNumber = document.getElementById("inputNumber").value;
+    const num = parseInt(inputNumber);
+
+    if (!isNaN(num) && num >= 0 && num <= 100000) {
+        const romanNumeral = intToRoman(num);
+        const outputElement = document.getElementById("output");
+        outputElement.textContent = ` ${romanNumeral}`;
+    } else {
+        alert("Invalid input. Please enter a valid integer between 0 and 100000.");
+    }
+});
